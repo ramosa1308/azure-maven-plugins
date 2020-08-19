@@ -6,6 +6,7 @@
 
 package com.microsoft.azure.maven;
 
+import com.microsoft.azure.common.appservice.DeploymentSlotSetting;
 import com.microsoft.azure.common.appservice.DeploymentType;
 import com.microsoft.azure.common.exceptions.AzureExecutionException;
 
@@ -74,6 +75,13 @@ public abstract class AbstractAppServiceMojo extends AbstractAzureMojo {
     protected String appServicePlanName;
 
     /**
+     * Deployment Slot. It will be created if it does not exist.
+     * It requires the web app exists already.
+     */
+    @Parameter(alias = "deploymentSlot")
+    protected DeploymentSlotSetting deploymentSlotSetting;
+
+    /**
      * Application settings of App Service, in the form of name-value pairs.
      * <pre>
      * {@code
@@ -116,6 +124,10 @@ public abstract class AbstractAppServiceMojo extends AbstractAzureMojo {
         return DeploymentType.fromString(deploymentType);
     }
 
+    public DeploymentSlotSetting getDeploymentSlotSetting() {
+        return deploymentSlotSetting;
+    }
+
     public List<Resource> getResources() {
         return Collections.EMPTY_LIST;
     }
@@ -126,5 +138,12 @@ public abstract class AbstractAppServiceMojo extends AbstractAzureMojo {
             this.getBuildDirectoryAbsolutePath(),
             outputFolder, this.getAppName()
         ).toString();
+    }
+
+    // Set method to get value from configuration.
+    // Required by maven plugin testing package when use @Parameter(alias="").
+    // And the name has to be "set<Alias>"
+    public void setDeploymentSlot(DeploymentSlotSetting slotSetting) {
+        this.deploymentSlotSetting = slotSetting;
     }
 }
