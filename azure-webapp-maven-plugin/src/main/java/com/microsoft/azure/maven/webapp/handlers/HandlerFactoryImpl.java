@@ -37,31 +37,37 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Locale;
 
+import static com.microsoft.azure.maven.AbstractAzureMojo.recordEvents;
+
 public class HandlerFactoryImpl extends HandlerFactory {
     public static final String UNKNOWN_DEPLOYMENT_TYPE =
         "The value of <deploymentType> is unknown, supported values are: jar, war, zip, ftp, auto and none.";
 
     @Override
     public RuntimeHandler getRuntimeHandler(final WebAppConfiguration config, final Azure azureClient) throws AzureExecutionException {
+        recordEvents("Start Get Runtime handler");
         if (config.getOs() == null) {
             return new NullRuntimeHandlerImpl();
         }
         final WebAppRuntimeHandler.Builder builder;
         switch (config.getOs()) {
             case Windows:
+                recordEvents("Start Get Windows Runtime handler");
                 builder = new WindowsRuntimeHandlerImpl.Builder().javaVersion(config.getJavaVersion())
                     .webContainer(config.getWebContainer());
                 break;
             case Linux:
+                recordEvents("Start Get Linux Runtime handler");
                 builder = new LinuxRuntimeHandlerImpl.Builder().runtime(config.getRuntimeStack());
                 break;
             case Docker:
+                recordEvents("Start Get Docker Runtime handler");
                 builder = getDockerRuntimeHandlerBuilder(config);
                 break;
             default:
                 throw new AzureExecutionException("Unknown ");
         }
-        return builder.appName(config.getAppName())
+        RuntimeHandler result = builder.appName(config.getAppName())
             .resourceGroup(config.getResourceGroup())
             .region(config.getRegion())
             .pricingTier(config.getPricingTier())
@@ -69,6 +75,8 @@ public class HandlerFactoryImpl extends HandlerFactory {
             .servicePlanResourceGroup((config.getServicePlanResourceGroup()))
             .azure(azureClient)
             .build();
+        recordEvents("Get Runtime handler Done");
+        return result;
     }
 
     protected WebAppRuntimeHandler.Builder getDockerRuntimeHandlerBuilder(final WebAppConfiguration config)

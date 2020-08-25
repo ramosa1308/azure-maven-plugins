@@ -7,6 +7,7 @@
 package com.microsoft.azure.maven.auth;
 
 import com.google.common.base.Preconditions;
+import com.microsoft.applicationinsights.internal.util.DateTimeUtils;
 import com.microsoft.azure.PagedList;
 import com.microsoft.azure.auth.AzureTokenWrapper;
 import com.microsoft.azure.auth.exception.AzureLoginFailureException;
@@ -19,6 +20,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.Optional;
+
+import static com.microsoft.azure.maven.AbstractAzureMojo.getDateTimeNowString;
+import static com.microsoft.azure.maven.AbstractAzureMojo.recordEvents;
 
 public class AzureClientFactory {
 
@@ -42,7 +46,8 @@ public class AzureClientFactory {
                 authenticated.withSubscription(subscriptionId);
         checkSubscription(azureClient, subscriptionId);
         final Subscription subscription = azureClient.getCurrentSubscription();
-        Log.info(String.format(SUBSCRIPTION_TEMPLATE, subscription.displayName(), subscription.subscriptionId()));
+        Log.info(String.format(SUBSCRIPTION_TEMPLATE, subscription.displayName(), subscription.subscriptionId()) + getDateTimeNowString());
+        recordEvents(String.format(SUBSCRIPTION_TEMPLATE, subscription.displayName(), subscription.subscriptionId()));
         return azureClient;
     }
 

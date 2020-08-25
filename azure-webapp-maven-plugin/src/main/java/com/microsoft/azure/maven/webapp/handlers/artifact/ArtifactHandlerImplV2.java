@@ -26,6 +26,8 @@ import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
 import java.util.stream.Collectors;
 
+import static com.microsoft.azure.maven.AbstractAzureMojo.getDateTimeNowString;
+import static com.microsoft.azure.maven.AbstractAzureMojo.recordEvents;
 import static com.microsoft.azure.maven.webapp.handlers.artifact.ArtifactHandlerUtils.DEFAULT_APP_SERVICE_JAR_NAME;
 import static com.microsoft.azure.maven.webapp.handlers.artifact.ArtifactHandlerUtils.areAllWarFiles;
 import static com.microsoft.azure.maven.webapp.handlers.artifact.ArtifactHandlerUtils.getContextPathFromFileName;
@@ -78,33 +80,37 @@ public class ArtifactHandlerImplV2 extends ArtifactHandlerBase {
 
     @Override
     public void publish(final DeployTarget target) throws AzureExecutionException {
+        recordEvents("Deploy Artifacts -> Publish -> Get All Artifacts");
         final List<File> allArtifacts = getAllArtifacts(stagingDirectoryPath);
+        recordEvents("Deploy Artifacts -> Publish -> Get All Artifacts Done");
         if (allArtifacts.size() == 0) {
             final String absolutePath = new File(stagingDirectoryPath).getAbsolutePath();
             throw new AzureExecutionException(
                     String.format("There is no artifact to deploy in staging directory: '%s'", absolutePath));
         }
-
-        Log.info(String.format(DEPLOY_START, target.getName()));
+        recordEvents("Deploy Artifacts -> Publish -> Deploy");
+        recordEvents(String.format(DEPLOY_START, target.getName()));
+        Log.info(String.format(DEPLOY_START, target.getName()) + getDateTimeNowString());
 
         if (areAllWarFiles(allArtifacts)) {
             publishArtifactsViaWarDeploy(target, stagingDirectoryPath, allArtifacts);
-            Log.info(String.format(DEPLOY_FINISH, target.getDefaultHostName()));
+            Log.info(String.format(DEPLOY_FINISH, target.getDefaultHostName()) + getDateTimeNowString());
             return;
         }
 
         if (!hasWarFiles(allArtifacts)) {
             publishArtifactsViaZipDeploy(target, stagingDirectoryPath);
-            Log.info(String.format(DEPLOY_FINISH, target.getDefaultHostName()));
+            Log.info(String.format(DEPLOY_FINISH, target.getDefaultHostName()) + getDateTimeNowString());
             return;
         }
 
         if (isDeployMixedArtifactsConfirmed()) {
             publishArtifactsViaZipDeploy(target, stagingDirectoryPath);
-            Log.info(String.format(DEPLOY_FINISH, target.getDefaultHostName()));
+            Log.info(String.format(DEPLOY_FINISH, target.getDefaultHostName()) + getDateTimeNowString());
         } else {
             Log.info(DEPLOY_ABORT);
         }
+        recordEvents("Deploy Artifacts -> Publish -> Deploy Done");
     }
 
     protected boolean isDeployMixedArtifactsConfirmed() {
@@ -144,7 +150,7 @@ public class ArtifactHandlerImplV2 extends ArtifactHandlerBase {
         final File stagingDirectory = new File(stagingDirectoryPath);
         final File zipFile = Utils.createTempFile(stagingDirectory.getName(), ".zip");
         ZipUtil.pack(stagingDirectory, zipFile);
-        Log.info(String.format("Deploying the zip package %s...", zipFile.getName()));
+        Log.info(String.format("Deploying the zip package %s...", zipFile.getName()) + getDateTimeNowString());
 
         // Add retry logic here to avoid Kudu's socket timeout issue.
         // More details: https://github.com/Microsoft/azure-maven-plugins/issues/339
@@ -170,7 +176,7 @@ public class ArtifactHandlerImplV2 extends ArtifactHandlerBase {
     public void publishWarArtifact(final DeployTarget target, final File warArtifact,
                                    final String contextPath) throws AzureExecutionException {
         final Runnable executor = getRealWarDeployExecutor(target, warArtifact, contextPath);
-        Log.info(String.format("Deploying the war file %s...", warArtifact.getName()));
+        Log.info(String.format("Deploying the war file %s...", warArtifact.getName()) + getDateTimeNowString());
 
         // Add retry logic here to avoid Kudu's socket timeout issue.
         // More details: https://github.com/Microsoft/azure-maven-plugins/issues/339

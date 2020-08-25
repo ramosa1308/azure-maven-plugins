@@ -49,8 +49,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -268,6 +271,8 @@ public abstract class AbstractAzureMojo extends AbstractMojo implements Telemetr
     }
 
     public Azure getAzureClient() throws AzureAuthFailureException {
+        final String event = "Start Get Azure Client" + UUID.randomUUID();
+        recordEvents(event);
         if (azure == null) {
             if (this.authentication != null && (this.authentication.getFile() != null || StringUtils.isNotBlank(authentication.getServerId()))) {
                 // TODO: remove the old way of authentication
@@ -287,6 +292,7 @@ public abstract class AbstractAzureMojo extends AbstractMojo implements Telemetr
                 getTelemetryProxy().addDefaultProperty(SUBSCRIPTION_ID_KEY, azure.subscriptionId());
             }
         }
+        recordEvents(event + "Done");
         return azure;
     }
 
@@ -463,7 +469,16 @@ public abstract class AbstractAzureMojo extends AbstractMojo implements Telemetr
                 // swallow this exception
             }
             ApacheSenderFactory.INSTANCE.create().close();
+            for (String event : events.keySet()) {
+                Log.info(String.format("event : %s at %s", event, events.get(event).format(formatter)));
+            }
         }
+    }
+
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    public static String getDateTimeNowString() {
+        return LocalDateTime.now().format(formatter);
     }
 
     /**
@@ -571,6 +586,12 @@ public abstract class AbstractAzureMojo extends AbstractMojo implements Telemetr
             Log.info(line);
         }
     }
+
+    public static void recordEvents(String event) {
+        events.put(event, LocalDateTime.now());
+    }
+
+    static Map<String, LocalDateTime> events = new LinkedHashMap<>();
 
     //endregion
 }

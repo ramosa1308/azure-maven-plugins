@@ -20,6 +20,9 @@ import com.microsoft.azure.management.appservice.WebApp.DefinitionStages.WithCre
 import com.microsoft.azure.management.appservice.WebApp.DefinitionStages.WithDockerContainerImage;
 import com.microsoft.azure.management.resources.fluentcore.arm.Region;
 
+import static com.microsoft.azure.maven.AbstractAzureMojo.getDateTimeNowString;
+import static com.microsoft.azure.maven.AbstractAzureMojo.recordEvents;
+
 
 public class WebAppUtils {
     public static final String SERVICE_PLAN_NOT_APPLICABLE = "The App Service Plan '%s' is not a %s Plan";
@@ -93,6 +96,7 @@ public class WebAppUtils {
         servicePlanName = AppServiceUtils.getAppServicePlanName(servicePlanName);
         final String servicePlanResGrp = AppServiceUtils.getAppServicePlanResourceGroup(
                 resourceGroup, servicePlanResourceGroup);
+        recordEvents(CREATE_SERVICE_PLAN + getDateTimeNowString());
         Log.info(String.format(CREATE_SERVICE_PLAN, servicePlanName));
 
         final AppServicePlan.DefinitionStages.WithGroup withGroup = azure.appServices().appServicePlans()
@@ -104,8 +108,8 @@ public class WebAppUtils {
                 withGroup.withNewResourceGroup(servicePlanResGrp);
 
         final AppServicePlan result = withPricingTier.withPricingTier(pricingTier).withOperatingSystem(os).create();
-
-        Log.info(SERVICE_PLAN_CREATED);
+        recordEvents(SERVICE_PLAN_CREATED);
+        Log.info(SERVICE_PLAN_CREATED + getDateTimeNowString());
         return result;
     }
 
