@@ -26,8 +26,8 @@ import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
 import java.util.stream.Collectors;
 
-import static com.microsoft.azure.maven.AbstractAzureMojo.getDateTimeNowString;
-import static com.microsoft.azure.maven.AbstractAzureMojo.recordEvents;
+import static com.microsoft.azure.maven.telemetry.BenchmarkUtils.getDateTimeNowString;
+import static com.microsoft.azure.maven.telemetry.BenchmarkUtils.recordEvents;
 import static com.microsoft.azure.maven.webapp.handlers.artifact.ArtifactHandlerUtils.DEFAULT_APP_SERVICE_JAR_NAME;
 import static com.microsoft.azure.maven.webapp.handlers.artifact.ArtifactHandlerUtils.areAllWarFiles;
 import static com.microsoft.azure.maven.webapp.handlers.artifact.ArtifactHandlerUtils.getContextPathFromFileName;

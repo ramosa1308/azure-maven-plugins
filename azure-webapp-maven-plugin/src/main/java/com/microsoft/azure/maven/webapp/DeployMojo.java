@@ -16,8 +16,8 @@ import com.microsoft.azure.management.appservice.PublishingProfile;
 import com.microsoft.azure.management.appservice.WebApp;
 import com.microsoft.azure.management.appservice.WebApp.DefinitionStages.WithCreate;
 import com.microsoft.azure.management.appservice.WebApp.Update;
-import com.microsoft.azure.maven.AbstractAzureMojo;
 import com.microsoft.azure.maven.auth.AzureAuthFailureException;
+import com.microsoft.azure.maven.telemetry.BenchmarkUtils;
 import com.microsoft.azure.maven.webapp.configuration.SchemaVersion;
 import com.microsoft.azure.maven.webapp.deploytarget.DeploymentSlotDeployTarget;
 import com.microsoft.azure.maven.webapp.deploytarget.WebAppDeployTarget;
@@ -78,24 +78,24 @@ public class DeployMojo extends AbstractWebAppMojo {
             final RuntimeHandler runtimeHandler = getFactory().getRuntimeHandler(
                     getWebAppConfiguration(), getAzureClient());
             // todo: use parser to get web app from mojo configs
-            recordEvents("Start Get Web App");
+            BenchmarkUtils.recordEvents("Start Get Web App");
             final WebApp app = getWebApp();
-            recordEvents("Get Web App Done");
+            BenchmarkUtils.recordEvents("Get Web App Done");
             if (app == null) {
-                recordEvents("Start Create Web App");
+                BenchmarkUtils.recordEvents("Start Create Web App");
                 if (this.isDeployToDeploymentSlot()) {
                     throw new AzureExecutionException(WEBAPP_NOT_EXIST_FOR_SLOT);
                 }
                 createWebApp(runtimeHandler);
-                recordEvents("Create Web App Done");
+                BenchmarkUtils.recordEvents("Create Web App Done");
             } else {
-                recordEvents("Start Update Web App");
+                BenchmarkUtils.recordEvents("Start Update Web App");
                 updateWebApp(runtimeHandler, app);
-                recordEvents("Update Web App Done");
+                BenchmarkUtils.recordEvents("Update Web App Done");
             }
-            recordEvents("Start Deploy Artifacts");
+            BenchmarkUtils.recordEvents("Start Deploy Artifacts");
             deployArtifacts(getWebAppConfiguration());
-            recordEvents("Deploy Artifacts Done");
+            BenchmarkUtils.recordEvents("Deploy Artifacts Done");
         } catch (IOException | AzureAuthFailureException | InterruptedException e) {
             throw new AzureExecutionException(
                     String.format("Encoutering error when deploying to azure: '%s'", e.getMessage()), e);
@@ -103,13 +103,13 @@ public class DeployMojo extends AbstractWebAppMojo {
     }
 
     protected void createWebApp(final RuntimeHandler runtimeHandler) throws AzureExecutionException {
-        Log.info(WEBAPP_NOT_EXIST + getDateTimeNowString());
-        recordEvents(WEBAPP_NOT_EXIST);
+        Log.info(WEBAPP_NOT_EXIST + BenchmarkUtils.getDateTimeNowString());
+        BenchmarkUtils.recordEvents(WEBAPP_NOT_EXIST);
         final WithCreate withCreate = (WithCreate) runtimeHandler.defineAppWithRuntime();
         getFactory().getSettingsHandler(this).processSettings(withCreate);
         withCreate.create();
-        Log.info(WEBAPP_CREATED + getDateTimeNowString());
-        recordEvents(WEBAPP_CREATED);
+        Log.info(WEBAPP_CREATED + BenchmarkUtils.getDateTimeNowString());
+        BenchmarkUtils.recordEvents(WEBAPP_CREATED);
     }
 
     protected void updateWebApp(final RuntimeHandler runtimeHandler, final WebApp app) throws AzureExecutionException, AzureAuthFailureException {
@@ -138,12 +138,12 @@ public class DeployMojo extends AbstractWebAppMojo {
     protected void deployArtifacts(WebAppConfiguration webAppConfiguration)
         throws AzureAuthFailureException, InterruptedException, AzureExecutionException, IOException {
         try {
-            recordEvents("Start Before Deploy Artifacts Job");
+            BenchmarkUtils.recordEvents("Start Before Deploy Artifacts Job");
             util.beforeDeployArtifacts();
-            recordEvents("Before Deploy Artifacts Job Done");
-            recordEvents("Deploy Artifacts -> Get Web App");
+            BenchmarkUtils.recordEvents("Before Deploy Artifacts Job Done");
+            BenchmarkUtils.recordEvents("Deploy Artifacts -> Get Web App");
             final WebApp app = getWebApp();
-            recordEvents("Deploy Artifacts -> Get Web Done");
+            BenchmarkUtils.recordEvents("Deploy Artifacts -> Get Web Done");
             final DeployTarget target;
 
             if (this.isDeployToDeploymentSlot()) {
@@ -156,19 +156,19 @@ public class DeployMojo extends AbstractWebAppMojo {
             } else {
                 target = new WebAppDeployTarget(app);
             }
-            recordEvents("Deploy Artifacts -> Get Artifact Handler");
+            BenchmarkUtils.recordEvents("Deploy Artifacts -> Get Artifact Handler");
             final ArtifactHandler artifactHandler = getFactory().getArtifactHandler(this);
-            recordEvents("Deploy Artifacts -> Get Artifact Done");
+            BenchmarkUtils.recordEvents("Deploy Artifacts -> Get Artifact Done");
             final boolean isV1Schema = SchemaVersion.fromString(this.getSchemaVersion()) == SchemaVersion.V1;
             if (isV1Schema) {
-                recordEvents("Deploy Artifacts -> Handle V1 Artifact");
+                BenchmarkUtils.recordEvents("Deploy Artifacts -> Handle V1 Artifact");
                 handleV1Artifact(target, this.resources, artifactHandler);
-                recordEvents("Deploy Artifacts -> Handle V1 Artifact Done");
+                BenchmarkUtils.recordEvents("Deploy Artifacts -> Handle V1 Artifact Done");
             } else {
-                recordEvents("Deploy Artifacts -> Handle V1 Artifact");
+                BenchmarkUtils.recordEvents("Deploy Artifacts -> Handle V1 Artifact");
                 final List<Resource> v2Resources = this.deployment == null ? null : this.deployment.getResources();
                 handleV2Artifact(target, v2Resources, artifactHandler);
-                recordEvents("Deploy Artifacts -> Handle V2 Artifact Done");
+                BenchmarkUtils.recordEvents("Deploy Artifacts -> Handle V2 Artifact Done");
             }
         } finally {
             util.afterDeployArtifacts();
@@ -177,7 +177,7 @@ public class DeployMojo extends AbstractWebAppMojo {
 
     private void handleV2Artifact(final DeployTarget target, List<Resource> v2Resources, ArtifactHandler artifactHandler)
             throws IOException, AzureExecutionException {
-        recordEvents("Deploy Artifacts -> Copy Resource To Staging Folder");
+        BenchmarkUtils.recordEvents("Deploy Artifacts -> Copy Resource To Staging Folder");
         if (v2Resources == null || v2Resources.isEmpty()) {
             Log.warn("No <resources> is found in <deployment> element in pom.xml, skip deployment.");
             return;
@@ -190,7 +190,7 @@ public class DeployMojo extends AbstractWebAppMojo {
             Log.info("All external resources are already deployed.");
             return;
         }
-        recordEvents("Deploy Artifacts -> Copy Resource To Staging Folder Done");
+        BenchmarkUtils.recordEvents("Deploy Artifacts -> Copy Resource To Staging Folder Done");
         artifactHandler.publish(target);
     }
 

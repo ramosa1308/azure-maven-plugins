@@ -27,6 +27,7 @@ import com.microsoft.azure.maven.auth.AzureAuthHelperLegacy;
 import com.microsoft.azure.maven.auth.AzureClientFactory;
 import com.microsoft.azure.maven.common.utils.MavenUtils;
 import com.microsoft.azure.maven.telemetry.AppInsightsProxy;
+import com.microsoft.azure.maven.telemetry.BenchmarkUtils;
 import com.microsoft.azure.maven.telemetry.TelemetryConfiguration;
 import com.microsoft.azure.maven.telemetry.TelemetryProxy;
 import org.apache.commons.lang3.StringUtils;
@@ -49,11 +50,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -272,7 +270,7 @@ public abstract class AbstractAzureMojo extends AbstractMojo implements Telemetr
 
     public Azure getAzureClient() throws AzureAuthFailureException {
         final String event = "Start Get Azure Client" + UUID.randomUUID();
-        recordEvents(event);
+        BenchmarkUtils.recordEvents(event);
         if (azure == null) {
             if (this.authentication != null && (this.authentication.getFile() != null || StringUtils.isNotBlank(authentication.getServerId()))) {
                 // TODO: remove the old way of authentication
@@ -292,7 +290,7 @@ public abstract class AbstractAzureMojo extends AbstractMojo implements Telemetr
                 getTelemetryProxy().addDefaultProperty(SUBSCRIPTION_ID_KEY, azure.subscriptionId());
             }
         }
-        recordEvents(event + "Done");
+        BenchmarkUtils.recordEvents(event + "Done");
         return azure;
     }
 
@@ -469,16 +467,17 @@ public abstract class AbstractAzureMojo extends AbstractMojo implements Telemetr
                 // swallow this exception
             }
             ApacheSenderFactory.INSTANCE.create().close();
-            for (String event : events.keySet()) {
-                Log.info(String.format("event : %s at %s", event, events.get(event).format(formatter)));
+            for (String event : BenchmarkUtils.events.keySet()) {
+                Log.info(String.format("event : %s at %s", event, BenchmarkUtils.events.get(event).format(BenchmarkUtils.formatter)));
+            }
+
+            for (String request : BenchmarkUtils.requests.keySet()) {
+                final List<Long> requestTimeCosts = BenchmarkUtils.requests.get(request);
+                final String time = String.valueOf(requestTimeCosts.size());
+                final String costs = StringUtils.join(requestTimeCosts, ",");
+                Log.info(String.format("Url : %s ; Times: %s, Cost : %s", request, time, costs));
             }
         }
-    }
-
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-    public static String getDateTimeNowString() {
-        return LocalDateTime.now().format(formatter);
     }
 
     /**
@@ -586,12 +585,6 @@ public abstract class AbstractAzureMojo extends AbstractMojo implements Telemetr
             Log.info(line);
         }
     }
-
-    public static void recordEvents(String event) {
-        events.put(event, LocalDateTime.now());
-    }
-
-    static Map<String, LocalDateTime> events = new LinkedHashMap<>();
 
     //endregion
 }

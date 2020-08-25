@@ -37,7 +37,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Locale;
 
-import static com.microsoft.azure.maven.AbstractAzureMojo.recordEvents;
+import static com.microsoft.azure.maven.telemetry.BenchmarkUtils.recordEvents;
 
 public class HandlerFactoryImpl extends HandlerFactory {
     public static final String UNKNOWN_DEPLOYMENT_TYPE =

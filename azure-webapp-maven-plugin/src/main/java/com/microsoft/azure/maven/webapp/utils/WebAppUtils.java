@@ -20,8 +20,8 @@ import com.microsoft.azure.management.appservice.WebApp.DefinitionStages.WithCre
 import com.microsoft.azure.management.appservice.WebApp.DefinitionStages.WithDockerContainerImage;
 import com.microsoft.azure.management.resources.fluentcore.arm.Region;
 
-import static com.microsoft.azure.maven.AbstractAzureMojo.getDateTimeNowString;
-import static com.microsoft.azure.maven.AbstractAzureMojo.recordEvents;
+import static com.microsoft.azure.maven.telemetry.BenchmarkUtils.getDateTimeNowString;
+import static com.microsoft.azure.maven.telemetry.BenchmarkUtils.recordEvents;
 
 
 public class WebAppUtils {
