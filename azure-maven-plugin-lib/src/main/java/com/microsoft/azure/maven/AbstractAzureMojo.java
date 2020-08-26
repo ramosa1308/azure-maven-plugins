@@ -470,13 +470,24 @@ public abstract class AbstractAzureMojo extends AbstractMojo implements Telemetr
             for (String event : BenchmarkUtils.events.keySet()) {
                 Log.info(String.format("event : %s at %s", event, BenchmarkUtils.events.get(event).format(BenchmarkUtils.formatter)));
             }
-
+            long totalRequestCost = 0;
             for (String request : BenchmarkUtils.requests.keySet()) {
-                final List<Long> requestTimeCosts = BenchmarkUtils.requests.get(request);
-                final String time = String.valueOf(requestTimeCosts.size());
-                final String costs = StringUtils.join(requestTimeCosts, ",");
-                Log.info(String.format("Url : %s ; Times: %s, Cost : %s", request, time, costs));
+                final List<BenchmarkUtils.Status> requestTimeCosts = BenchmarkUtils.requests.get(request);
+                Log.info(String.format("Url : %s ; Times: %s", request, requestTimeCosts.size()));
+                for (BenchmarkUtils.Status status : requestTimeCosts) {
+                    Log.info("\t" + status.toString());
+                    totalRequestCost+=status.timeCost;
+                }
             }
+            for (String request : BenchmarkUtils.failedRequests.keySet()) {
+                final List<BenchmarkUtils.Status> requestTimeCosts = BenchmarkUtils.failedRequests.get(request);
+                Log.warn(String.format("Url : %s ; Times: %s", request, requestTimeCosts.size()));
+                for (BenchmarkUtils.Status status : requestTimeCosts) {
+                    Log.warn("\t" + status.toString());
+                    totalRequestCost+=status.timeCost;
+                }
+            }
+            Log.info("Total Request Time Cost : "+ totalRequestCost);
         }
     }
 
