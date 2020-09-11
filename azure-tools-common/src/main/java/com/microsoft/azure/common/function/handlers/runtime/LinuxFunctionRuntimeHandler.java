@@ -7,6 +7,7 @@
 package com.microsoft.azure.common.function.handlers.runtime;
 
 import com.microsoft.azure.common.logging.Log;
+import com.microsoft.azure.common.utils.AppServiceUtils;
 import com.microsoft.azure.management.appservice.FunctionApp;
 import com.microsoft.azure.management.appservice.FunctionDeploymentSlot;
 import com.microsoft.azure.management.appservice.FunctionRuntimeStack;
@@ -52,8 +53,8 @@ public class LinuxFunctionRuntimeHandler extends AbstractLinuxFunctionRuntimeHan
     @Override
     public WebAppBase.Update<FunctionDeploymentSlot> updateDeploymentSlot(FunctionDeploymentSlot deploymentSlot) {
         checkFunctionExtensionVersion();
-        final PricingTier pricingTier = getAppServicePlan().pricingTier();
-        final String targetFxVersion = pricingTier.toSkuDescription().tier() == SkuName.DYNAMIC.toString() ?
+        final PricingTier pricingTier = AppServiceUtils.getAppServicePlanByAppService(deploymentSlot).pricingTier();
+        final String targetFxVersion = StringUtils.equals(pricingTier.toSkuDescription().tier(), SkuName.DYNAMIC.toString()) ?
                 getRuntimeStack().getLinuxFxVersionForConsumptionPlan() : getRuntimeStack().getLinuxFxVersionForDedicatedPlan();
         if (!StringUtils.equals(deploymentSlot.linuxFxVersion(), targetFxVersion)) {
             // Update runtime in deployment slot is not supported with current SDK
