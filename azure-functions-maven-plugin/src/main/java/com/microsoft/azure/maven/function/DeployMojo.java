@@ -73,9 +73,9 @@ public class DeployMojo extends AbstractFunctionMojo {
 
     private static final int LIST_TRIGGERS_MAX_RETRY = 3;
     private static final int LIST_TRIGGERS_RETRY_PERIOD_IN_SECONDS = 10;
-    private static final String DEPLOY_START = "Trying to deploy the function app...";
+    private static final String DEPLOY_START = "Starting deployment...";
     private static final String DEPLOY_FINISH =
-        "Successfully deployed the function app at https://%s.azurewebsites.net.";
+        "Deployment done, you may access your resource through %s";
     private static final String FUNCTION_APP_CREATE_START = "The specified function app does not exist. " +
         "Creating a new function app...";
     private static final String FUNCTION_APP_CREATED = "Successfully created the function app: %s.";
@@ -148,10 +148,8 @@ public class DeployMojo extends AbstractFunctionMojo {
             final DeployTarget deployTarget = new DeployTarget(target, DeployTargetType.FUNCTION);
 
             Log.info(DEPLOY_START);
-
             getArtifactHandler().publish(deployTarget);
-
-            Log.info(String.format(DEPLOY_FINISH, getAppName()));
+            Log.info(String.format(DEPLOY_FINISH, getResourcePortalUrl(target)));
 
             if (!isDeployToSlot()) {
                 listHTTPTriggerUrls();
@@ -204,9 +202,9 @@ public class DeployMojo extends AbstractFunctionMojo {
         final DeploymentSlotSetting slotSetting = getDeploymentSlotSetting();
         final FunctionDeploymentSlot.DefinitionStages.WithCreate withCreate = runtimeHandler.createDeploymentSlot(functionApp, slotSetting);
         // Call update after creation for app settings as we can't modify the app settings from creation source during deployment creation
-        final FunctionDeploymentSlot result = updateDeploymentSlot(withCreate.create(), runtimeHandler);
-        Log.info(String.format(FUNCTION_SLOT_CREATED, getAppName()));
-        return result;
+        final FunctionDeploymentSlot result = withCreate.create();
+        Log.info(String.format(FUNCTION_SLOT_CREATED, result.name()));
+        return updateDeploymentSlot(withCreate.create(), runtimeHandler);
     }
 
     protected FunctionDeploymentSlot updateDeploymentSlot(final FunctionDeploymentSlot deploymentSlot, final FunctionRuntimeHandler runtimeHandler)
@@ -215,7 +213,7 @@ public class DeployMojo extends AbstractFunctionMojo {
         final WebAppBase.Update<FunctionDeploymentSlot> update = runtimeHandler.updateDeploymentSlot(deploymentSlot);
         updateFunctionAppSettings(update);
         final FunctionDeploymentSlot result = update.apply();
-        Log.info(String.format(FUNCTION_SLOT_UPDATE_DONE, getAppName()));
+        Log.info(String.format(FUNCTION_SLOT_UPDATE_DONE, result.name()));
         return result;
     }
 

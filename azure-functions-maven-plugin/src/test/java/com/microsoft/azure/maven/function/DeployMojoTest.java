@@ -82,11 +82,11 @@ public class DeployMojoTest extends MojoTestBase {
         doReturn(handler).when(mojoSpy).getArtifactHandler();
         doReturn(runtimeHandler).when(mojoSpy).getFunctionRuntimeHandler();
         doCallRealMethod().when(mojoSpy).createOrUpdateResource();
-        doCallRealMethod().when(mojoSpy).getAppName();
         final DeployTarget deployTarget = new DeployTarget(app, DeployTargetType.FUNCTION);
         doNothing().when(mojoSpy).listHTTPTriggerUrls();
         doNothing().when(mojoSpy).checkArtifactCompileVersion();
         doNothing().when(mojoSpy).parseConfiguration();
+        doReturn(null).when(mojoSpy).getResourcePortalUrl(any());
         mojoSpy.doExecute();
         verify(mojoSpy, times(1)).createOrUpdateResource();
         verify(mojoSpy, times(1)).doExecute();
@@ -242,7 +242,7 @@ public class DeployMojoTest extends MojoTestBase {
         doReturn(null).when(mojoSpy).getDeploymentSlot();
         doReturn(slot).when(mojoSpy).updateDeploymentSlot(any(), any());
         doCallRealMethod().when(mojoSpy).createDeploymentSlot(any(), any());
-
+        doReturn(null).when(mojoSpy).getResourcePortalUrl(any());
         mojoSpy.doExecute();
 
         verify(mojoSpy, times(1)).doExecute();
