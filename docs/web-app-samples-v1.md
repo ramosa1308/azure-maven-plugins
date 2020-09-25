@@ -3,19 +3,19 @@
 #### Table of Content
 * V1 configuration (Deprecated)
    * Web App on Linux
-      * [Tomcat with JRE 8](#Web-App-on-Linux-with-Java-8-Tomcat-and-WAR-deployment)
-      * [JRE 8](#Web-App-on-Linux-with-Java-8-and-JAR-deployment)
+      * [Tomcat with JRE 8](#Web-App-on-Linux-with-Java-8-Tomcat-and-WAR-deploymentConfig)
+      * [JRE 8](#Web-App-on-Linux-with-Java-8-and-JAR-deploymentConfig)
    * Web App on Windows
-      * [Deploy War File to Tomcat](#Web-App-on-Windows-with-Java-8-Tomcat-and-WAR-deployment)
-      * [Deploy Executable Far File](#Web-App-on-Windows-with-Java-8-and-JAR-deployment)
+      * [Deploy War File to Tomcat](#Web-App-on-Windows-with-Java-8-Tomcat-and-WAR-deploymentConfig)
+      * [Deploy Executable Far File](#Web-App-on-Windows-with-Java-8-and-JAR-deploymentConfig)
    * Web App for Containers
       * [Public Docker Hub](#Web-App-for-Containers-with-public-DockerHub-container-image)
       * [Private Docker Hub](#Web-App-for-Containers-with-private-DockerHub-container-image)
-* [Deploy to Existing App Service Plan](#Web-App-deployment-to-an-existing-App-Service-Plan)
+* [Deploy to Existing App Service Plan](#Web-App-deploymentConfig-to-an-existing-App-Service-Plan)
 * [Deploy to Web App Deployment Slot](#Deploy-to-Web-App-Deployment-Slot)
 
 <a name="web-app-on-linux-tomcat"></a>
-## Web App (on Linux) with Java 8, Tomcat and WAR deployment
+## Web App (on Linux) with Java 8, Tomcat and WAR deploymentConfig
 The following configuration is applicable for below scenario:
 - Reference `<serverId>` in Maven's `settings.xml` to authenticate with Azure
 - Web App on Linux
@@ -72,7 +72,7 @@ The following configuration is applicable for below scenario:
    ```
 
 <a name="web-app-on-linux-jre8"></a>
-## Web App (on Linux) with Java 8 and JAR deployment
+## Web App (on Linux) with Java 8 and JAR deploymentConfig
 The following configuration is applicable for below scenario:
 - Reference `<serverId>` in Maven's `settings.xml` to authenticate with Azure
 - Web App on Linux
@@ -121,8 +121,8 @@ The following configuration is applicable for below scenario:
    </project>
    ```
 
-<a name="windows-tomcat-war-deployment"></a>
-## Web App (on Windows) with Java 8, Tomcat and WAR deployment
+<a name="windows-tomcat-war-deploymentConfig"></a>
+## Web App (on Windows) with Java 8, Tomcat and WAR deploymentConfig
 The following configuration is applicable for below scenario:
 - Reference `<serverId>` in Maven's `settings.xml` to authenticate with Azure
 - Web App on Windows
@@ -179,8 +179,8 @@ The following configuration is applicable for below scenario:
    </project>
    ```
 
-<a name="windows-jar-deployment"></a>
-## Web App (on Windows) with Java 8 and JAR deployment
+<a name="windows-jar-deploymentConfig"></a>
+## Web App (on Windows) with Java 8 and JAR deploymentConfig
 The following configuration is applicable for below scenario:
 - Reference `<serverId>` in Maven's `settings.xml` to authenticate with Azure
 - Web App on Windows
@@ -346,7 +346,7 @@ The following configuration is applicable for below scenario:
    ```
 
 <a name="existing-app-service-plan"></a>
-## Web App deployment to an existing App Service Plan
+## Web App deploymentConfig to an existing App Service Plan
 The following configuration is applicable for below scenario:
 - Web App on Linux
 - Use existing App Service Plan
@@ -384,15 +384,15 @@ The following configuration is applicable for below scenario:
    </project>
    ```
 
-<a name = "web-application-to-deployment-slot"></a>
+<a name = "web-application-to-deploymentConfig-slot"></a>
 ## Deploy to Web App Deployment Slot
 The following configuration is applicable for below scenario:
 
 - Reference `<serverId>` in Maven's `settings.xml` to authenticate with Azure
 - Web App on Linux
 - Use Java 8 and Tomcat 8.5
-- Use **WAR** deployment to deploy war file to context path `/${project.build.finalName}` in your Web App server
-- Create a deployment slot and copy configuration from parent Web App then do the deploy
+- Use **WAR** deploymentConfig to deploy war file to context path `/${project.build.finalName}` in your Web App server
+- Create a deploymentConfig slot and copy configuration from parent Web App then do the deploy
 
 ```xml
 <project>

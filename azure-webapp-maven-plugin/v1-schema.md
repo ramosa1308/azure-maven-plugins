@@ -8,11 +8,11 @@ Property | Required | Description | Version
 `<resourceGroup>` | true | Azure Resource Group for your Web App. | 0.1.0+
 `<appName>` | true | The name of your Web App. | 0.1.0+
 `<pricingTier>` | false | The pricing tier for your Web App. The default value is **P1V2**.| 0.1.0+
-`<deploymentSlot>` | false | The deployment slot to deploy your application. | 1.3.0+
+`<deploymentSlot>` | false | The deploymentConfig slot to deploy your application. | 1.3.0+
 `<appServicePlanResourceGroup>` | false | The resource group of the existing App Service Plan. If not specified, the value defined in `<resourceGroup>` will be used by default. | 1.0.0+
 `<appServicePlanName>` | false | The name of the existing App Service Plan. | 1.0.0+
 `<appSettings>` | false | Specifies the application settings for your Web App. | 0.1.0+
-`<stopAppDuringDeployment>` | false | To stop the target Web App or not during deployment. This will prevent deployment failure caused by IIS locking files. | 0.1.4+
+`<stopAppDuringDeployment>` | false | To stop the target Web App or not during deploymentConfig. This will prevent deploymentConfig failure caused by IIS locking files. | 0.1.4+
   
 
 ### Runtime settings
@@ -55,7 +55,7 @@ Property | Required | Description | Version
 
 ### Deployment settings
 
-  There are multiple deployment types are supported:
+  There are multiple deploymentConfig types are supported:
     
 - ZIP Deploy
     
@@ -102,14 +102,14 @@ Property | Required | Description | Version
     
 - AUTO Deploy
 
-  This is the default deployment type used by the plugin. It will inspect `<packaging>` field in the pom file to decide how to deploy the artifact. If the `<packaging>` is set to `war`, the plugin will use war deployment. If the `<packaging>` is set to `jar`, the plugin will use jar deployment. Otherwise, the plugin will skip the deployment, which is the same as `NONE` deployment.
+  This is the default deploymentConfig type used by the plugin. It will inspect `<packaging>` field in the pom file to decide how to deploy the artifact. If the `<packaging>` is set to `war`, the plugin will use war deploymentConfig. If the `<packaging>` is set to `jar`, the plugin will use jar deploymentConfig. Otherwise, the plugin will skip the deploymentConfig, which is the same as `NONE` deploymentConfig.
 
-  If you want the plugin to inspect the `<packaging>` field. Just don't set `<deploymentType>`. The plugin will use `AUTO` deployment as default.
+  If you want the plugin to inspect the `<packaging>` field. Just don't set `<deploymentType>`. The plugin will use `AUTO` deploymentConfig as default.
 
 
 - NONE
 
-  NONE means do not need deploy, so just skip deployment.
+  NONE means do not need deploy, so just skip deploymentConfig.
 
 - FTP
  

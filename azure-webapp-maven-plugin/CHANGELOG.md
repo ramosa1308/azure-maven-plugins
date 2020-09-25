@@ -27,7 +27,7 @@ All notable changes to the "Maven Plugin for Azure App Service" will be document
 ## 1.9.1
 - Remove support for WildFly for Web App on Linux.
 - Fix: There is no artifact to deploy in staging directory.[#1032](https://github.com/microsoft/azure-maven-plugins/issues/1032)
-- Fix: Plugin will do useless during deployment update when the settings are not changed.[#1008](https://github.com/microsoft/azure-maven-plugins/issues/1008)
+- Fix: Plugin will do useless during deploymentConfig update when the settings are not changed.[#1008](https://github.com/microsoft/azure-maven-plugins/issues/1008)
 
 ## 1.9.0
 - Support deploy external resources to Azure outside `wwwroot`.[PR#953](https://github.com/microsoft/azure-maven-plugins/pull/953)
@@ -42,7 +42,7 @@ All notable changes to the "Maven Plugin for Azure App Service" will be document
 - Fix: `config` does not support lowercase characters.[#745](https://github.com/microsoft/azure-maven-plugins/issues/745)
 - Fix: Plugin will always modify `pom.xml` in project folder.[#757](https://github.com/microsoft/azure-maven-plugins/issues/757)
 - Fix: Fail to rename windows java se artifact to `app.jar`.[PR#865](https://github.com/microsoft/azure-maven-plugins/pull/865)
-- Fix: Plugin did not clean staging folder after deployment.[#869](https://github.com/microsoft/azure-maven-plugins/issues/869)
+- Fix: Plugin did not clean staging folder after deploymentConfig.[#869](https://github.com/microsoft/azure-maven-plugins/issues/869)
 
 ## 1.7.0
 - Support customize java options for Windows Java SE app service.[#640](https://github.com/microsoft/azure-maven-plugins/issues/640)
@@ -86,19 +86,19 @@ All notable changes to the "Maven Plugin for Azure App Service" will be document
 - Support zip deploy.
 - Refactor output message when `<deploymentType>` is set to NONE.
 - Fix NPR when `<targetPath>` not set in `<resource>`.
-- Output the web app URL when deployment is finished.
+- Output the web app URL when deploymentConfig is finished.
 
 ## 1.3.0
-- Support deploy web applications to a deployment slot
-- Add new deployment types: *AUTO* *JAR* *NONE*
-- Refactor output messages during deployment
+- Support deploy web applications to a deploymentConfig slot
+- Add new deploymentConfig types: *AUTO* *JAR* *NONE*
+- Refactor output messages during deploymentConfig
 
 ## 1.2.0
 - Add new Linux Web App runtime - jre8 [#185](https://github.com/Microsoft/azure-maven-plugins/issues/185)
 - Fix a bug that make Web App for Containers deploy fail [#156](https://github.com/Microsoft/azure-maven-plugins/issues/156)
 
 ## 1.1.0
-- Fix the issue that token will be printed during deployment. [#129](https://github.com/Microsoft/azure-maven-plugins/issues/129)
+- Fix the issue that token will be printed during deploymentConfig. [#129](https://github.com/Microsoft/azure-maven-plugins/issues/129)
 - Support war deploy
 
 ## 1.0.0

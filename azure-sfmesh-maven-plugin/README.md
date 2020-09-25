@@ -60,7 +60,7 @@ Need to update the above link after publishing
 - Deploys all the resources to the Azure Service Fabric Mesh environment 
 
 #### `azure-sfmesh:deploytocluster`
-- Creates a folder (`meshDeploy`) which contains the deployment JSONs generated from yamls which are applicable for Service Fabric clusters
+- Creates a folder (`meshDeploy`) which contains the deploymentConfig JSONs generated from yamls which are applicable for Service Fabric clusters
 - Deploys all the resources to the Service Fabric cluster
  
 

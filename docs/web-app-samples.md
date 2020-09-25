@@ -4,12 +4,12 @@
 * V2 configuration
    * Web App on Linux
       * [Tomcat with JRE 8](#Web-App-on-Linux-with-Java-8-Tomcat)
-      * [JRE 8](#Web-App-on-Linux-with-Java-8-and-JAR-deployment)
+      * [JRE 8](#Web-App-on-Linux-with-Java-8-and-JAR-deploymentConfig)
    * Web App on Windows
       * [Deploy War File to Tomcat](#Web-App-on-Windows-with-Java-8-Tomcat)
    * Web App for Containers
       * [Public Docker Hub](#Web-App-for-Containers-with-public-DockerHub-container-image)
-* [Deploy to Existing App Service Plan](#Web-App-deployment-to-an-existing-App-Service-Plan)
+* [Deploy to Existing App Service Plan](#Web-App-deploymentConfig-to-an-existing-App-Service-Plan)
 * [Deploy to Web App Deployment Slot](#Deploy-to-Web-App-Deployment-Slot)
 
 <a name="web-app-on-linux-tomcat-v2"></a>
@@ -65,7 +65,7 @@ The following configuration is applicable for below scenario:
                      </property>
                   </appSettings>
                   <!-- Deployment settings -->
-                  <deployment>
+                  <deploymentConfig>
                     <resources>
                       <resource>
                         <directory>${project.basedir}/target</directory>
@@ -75,7 +75,7 @@ The following configuration is applicable for below scenario:
                         </includes>
                       </resource>
                     </resources>
-                  </deployment>
+                  </deploymentConfig>
                </configuration>
             </plugin>
             ...
@@ -85,7 +85,7 @@ The following configuration is applicable for below scenario:
    ```
 
 <a name="web-app-on-linux-jre8-v2"></a>
-## Web App (on Linux) with Java 8 and JAR deployment
+## Web App (on Linux) with Java 8 and JAR deploymentConfig
 The following configuration is applicable for below scenario:
 - Reference `<serverId>` in Maven's `settings.xml` to authenticate with Azure
 - Web App on Linux
@@ -123,7 +123,7 @@ The following configuration is applicable for below scenario:
                     <javaVersion>jre8</javaVersion>
                   </runtime>
                   <!-- Deployment settings -->
-                  <deployment>
+                  <deploymentConfig>
                     <resources>
                       <resource>
                         <directory>${project.basedir}/target</directory>
@@ -132,7 +132,7 @@ The following configuration is applicable for below scenario:
                         </includes>
                       </resource>
                     </resources>
-                  </deployment>
+                  </deploymentConfig>
                   
                   <!-- This is to make sure the jar file can be released at the server side -->
                   <stopAppDuringDeployment>true</stopAppDuringDeployment>
@@ -146,7 +146,7 @@ The following configuration is applicable for below scenario:
    ```   
 
 
-<a name="windows-tomcat-war-deployment-v2"></a>
+<a name="windows-tomcat-war-deploymentConfig-v2"></a>
 ## Web App (on Windows) with Java 8, Tomcat
 The following configuration is applicable for below scenario:
 - Reference `<serverId>` in Maven's `settings.xml` to authenticate with Azure
@@ -186,7 +186,7 @@ The following configuration is applicable for below scenario:
                     <webContainer>tomcat 8.5</webContainer>
                   </runtime>
                   <!-- Deployment settings -->
-                  <deployment>
+                  <deploymentConfig>
                     <resources>
                       <resource>
                         <directory>${project.basedir}/target</directory>
@@ -196,7 +196,7 @@ The following configuration is applicable for below scenario:
                         </includes>
                       </resource>
                     </resources>
-                  </deployment>
+                  </deploymentConfig>
                </configuration>
             </plugin>
             ...
@@ -250,7 +250,7 @@ The following configuration is applicable for below scenario:
    ```
 
 <a name="existing-app-service-plan"></a>
-## Web App deployment to an existing App Service Plan
+## Web App deploymentConfig to an existing App Service Plan
 The following configuration is applicable for below scenario:
 - Web App on Linux
 - Use existing App Service Plan
@@ -288,15 +288,15 @@ The following configuration is applicable for below scenario:
    </project>
    ```
    
-<a name = "web-application-to-deployment-slot"></a>
+<a name = "web-application-to-deploymentConfig-slot"></a>
 ## Deploy to Web App Deployment Slot
 The following configuration is applicable for below scenario:
 
 - Reference `<serverId>` in Maven's `settings.xml` to authenticate with Azure
 - Web App on Linux
 - Use Java 8 and Tomcat 8.5
-- Use **WAR** deployment to deploy war file to context path `/${project.build.finalName}` in your Web App server
-- Create a deployment slot and copy configuration from parent Web App then do the deploy
+- Use **WAR** deploymentConfig to deploy war file to context path `/${project.build.finalName}` in your Web App server
+- Create a deploymentConfig slot and copy configuration from parent Web App then do the deploy
 
 ```xml
 <project>

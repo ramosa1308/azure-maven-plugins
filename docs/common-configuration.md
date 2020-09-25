@@ -6,7 +6,7 @@ Property | Required | Description
 ---|---|---
 `<authentication>`| false | Specifies which authentication method to use with Azure.<br>There are three supported methods, which are described in the [Authentication with Azure](#authentication-with-azure) section.
 `<subscriptionId>` | false | Specifies the target subscription.<br>Use this setting when you have multiple subscriptions in your authentication file.
-`<failsOnError>` | false | Specifies whether to throw an exception when there are fatal errors during execution; the default value is **true**.<br>This setting helps prevent deployment failures from failing your entire Maven build.
+`<failsOnError>` | false | Specifies whether to throw an exception when there are fatal errors during execution; the default value is **true**.<br>This setting helps prevent deploymentConfig failures from failing your entire Maven build.
 `<allowTelemetry>` | false | Specifies whether to allow this plugin to send telemetry data; default value is **true**.
 `<skip>` | false | Specifies whether to skip execution. Default value is **false**.
 

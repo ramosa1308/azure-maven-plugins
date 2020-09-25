@@ -17,7 +17,7 @@
                     <appName>appName</appName>
                     <region>westeurope</region>
                     <schemaVersion>v2</schemaVersion>
-                    <deployment>
+                    <deploymentConfig>
                         <resources>
                             <resource>
                                 <directory>${project.basedir}/target</directory>
@@ -27,7 +27,7 @@
                                 </includes>
                             </resource>
                         </resources>
-                    </deployment>
+                    </deploymentConfig>
                     <appSettings>
                         <property>
                             <name>PORT</name>

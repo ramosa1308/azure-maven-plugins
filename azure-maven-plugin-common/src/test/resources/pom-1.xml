@@ -32,10 +32,10 @@
 					<subscriptionId>685ba005-af8d-4b04-8f16-a7bf38b2eb5a</subscriptionId>
 					<appName>helloworld</appName>
 					<public>true</public>
-					<deployment>
+					<deploymentConfig>
 						<cpu>1</cpu>
 						<memoryInGB>4</memoryInGB>
-					</deployment>
+					</deploymentConfig>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -19,7 +19,7 @@ All notable changes to the "Maven Plugin for Azure Function" will be documented 
   - [1.2.0](#120)
 
 ## 1.9.0
-- Support deployment slot in function maven toolkit [PR#1143](https://github.com/microsoft/azure-maven-plugins/pull/1143)
+- Support deploymentConfig slot in function maven toolkit [PR#1143](https://github.com/microsoft/azure-maven-plugins/pull/1143)
 - Update to azure-functions-java-library 1.4.0 [PR#1145](https://github.com/microsoft/azure-maven-plugins/pull/1145)
 
 ## 1.8.0
@@ -41,12 +41,12 @@ All notable changes to the "Maven Plugin for Azure Function" will be documented 
 - Support specify authentication method in configuration with parameter `<authType>`.[PR#975](https://github.com/microsoft/azure-maven-plugins/pull/975)
 - Support creating new app service plan with specified name.[PR#1011](https://github.com/microsoft/azure-maven-plugins/pull/1011)
 - Validate null subscription id and provide friendly error messages when authentication fails.[#931](https://github.com/microsoft/azure-maven-plugins/issues/931)
-- Fix: Functions will do useless service plan update during deployment when the settings are not changed[#1008](https://github.com/microsoft/azure-maven-plugins/issues/1008)
+- Fix: Functions will do useless service plan update during deploymentConfig when the settings are not changed[#1008](https://github.com/microsoft/azure-maven-plugins/issues/1008)
 
 ## 1.4.0
 - Support functions with Linux runtime.[PR#906](https://github.com/microsoft/azure-maven-plugins/pull/906)
 - Support functions in docker runtime.[PR#917](https://github.com/microsoft/azure-maven-plugins/pull/917)
-- Support new deployment methods: RUN_FROM_ZIP,RUN_FROM_BLOB.[PR#896](https://github.com/microsoft/azure-maven-plugins/pull/896),[PR#903](https://github.com/microsoft/azure-maven-plugins/pull/903)
+- Support new deploymentConfig methods: RUN_FROM_ZIP,RUN_FROM_BLOB.[PR#896](https://github.com/microsoft/azure-maven-plugins/pull/896),[PR#903](https://github.com/microsoft/azure-maven-plugins/pull/903)
 - Add default value for `FUNCTIONS_EXTENSION_VERSION`.[PR#898](https://github.com/microsoft/azure-maven-plugins/pull/898)
 
 ## 1.3.5
@@ -71,7 +71,7 @@ All notable changes to the "Maven Plugin for Azure Function" will be documented 
 
 ## 1.3.0
 - Add support for custom binding.
-- Set java version to 1.8 during deployment.
+- Set java version to 1.8 during deploymentConfig.
 
 ## 1.2.2
 - Updated to Java Function Lib 1.2.2.

@@ -1,8 +1,8 @@
 ## About web.config file
 
-> Note: This document will talk about web.config file when the user is using JAR deployment for a Windows Web App.
+> Note: This document will talk about web.config file when the user is using JAR deploymentConfig for a Windows Web App.
 
-When the user is using JAR deployment for a Windows Web App, the plugin will generate a a `web.config` file,
+When the user is using JAR deploymentConfig for a Windows Web App, the plugin will generate a a `web.config` file,
 this file will be saved at `%HOME%\site\wwwroot\` of your Web App.
 
 Below is the default template of `web.config` which is used in the plugin:
